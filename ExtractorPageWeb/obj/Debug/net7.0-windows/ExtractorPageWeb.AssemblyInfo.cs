@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ExtractorPageWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af44ebcb483149866d0a382c52693f93c7f08842")]
 [assembly: System.Reflection.AssemblyProductAttribute("ExtractorPageWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ExtractorPageWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

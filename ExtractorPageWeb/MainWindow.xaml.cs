@@ -1,4 +1,6 @@
 ﻿using HtmlAgilityPack;
+using System.Collections.ObjectModel;
+using System;
 using System.Net.Http;
 using System.Security.Policy;
 using System.Text;
@@ -12,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
+using ExtractorPageWeb.Helpers;
+using System.Windows.Controls.Primitives;
 
 namespace ExtractorPageWeb
 {
@@ -22,9 +26,15 @@ namespace ExtractorPageWeb
     {
         private static string _html;
         private static string _parseHtml;
+        private Helpers.SQLiteHelper _sQLiteHelper;
+        const string CONNECTION_STRING = "Data Source=ExtratorPageWeb.db;Version=3;";
+
+        private static ObservableCollection<string> _listDataBase { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+            _sQLiteHelper = new Helpers.SQLiteHelper(CONNECTION_STRING);
+            _sQLiteHelper.CreateTable();
         }     
         private void BtnRun_ClickAsync(object sender, RoutedEventArgs e)
         {
@@ -35,7 +45,10 @@ namespace ExtractorPageWeb
         {
             tbBlockHtml.Text = "";
         }
-
+        private void ButtonClearResult_Click(object sender, RoutedEventArgs e)
+        {
+            tbBlockResult.Text = "";
+        }
         private async void ExecuteRun(TextBox textBoxUrl, TextBox textBlock)
         {
             if (string.IsNullOrEmpty(textBoxUrl.Text))
@@ -82,7 +95,20 @@ namespace ExtractorPageWeb
                 default:
                     return;
             }
-            _parseHtml = node.InnerHtml;
+
+            var result = node.InnerHtml;
+            tbBlockResult.Text = result;
+            tabMain.SelectedItem = tabGetResult;
+
+            result = result.Replace("\n", "").Replace("\r", "").Trim();
+
+            _sQLiteHelper.InsertData(comboItem, tbSearch.Text, result, DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            List<ExtractorPageWeb.Helpers.Selector> listSelectors = _sQLiteHelper.GetAllSelectors();
+            gridHistory.ItemsSource = listSelectors;
         }
     }
 }
