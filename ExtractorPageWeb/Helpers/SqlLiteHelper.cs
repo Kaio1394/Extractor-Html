@@ -21,10 +21,10 @@ namespace ExtractorPageWeb.Helpers
             string createTableQuery = @"
             CREATE TABLE IF NOT EXISTS Selectors (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                TipoSeletor TEXT,
-                Seletor TEXT,
-                Resultado TEXT,
-                Data TEXT
+                TypeSelector TEXT,
+                SelectorName TEXT,
+                Result TEXT,
+                Date TEXT
             );"
             ;
 
@@ -40,17 +40,17 @@ namespace ExtractorPageWeb.Helpers
 
         public void InsertData(string tipoSeletor, string seletor, string resultado, string data)
         {
-            string insertQuery = "INSERT INTO Selectors (TipoSeletor, Seletor, Resultado, Data) VALUES (@TipoSeletor, @Seletor, @Resultado, @Data);";
+            string insertQuery = "INSERT INTO Selectors (TypeSelector, SelectorName, Result, Date) VALUES (@TypeSelector, @SelectorName, @Result, @Date);";
 
             using (var connection = new SQLiteConnection(_connectionString))
             {
                 connection.Open();
                 using (var cmd = new SQLiteCommand(insertQuery, connection))
                 {
-                    cmd.Parameters.AddWithValue("@TipoSeletor", tipoSeletor);
-                    cmd.Parameters.AddWithValue("@Seletor", seletor);
-                    cmd.Parameters.AddWithValue("@Resultado", resultado);
-                    cmd.Parameters.AddWithValue("@Data", data);
+                    cmd.Parameters.AddWithValue("@TypeSelector", tipoSeletor);
+                    cmd.Parameters.AddWithValue("@SelectorName", seletor);
+                    cmd.Parameters.AddWithValue("@Result", resultado);
+                    cmd.Parameters.AddWithValue("@Date", data);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -72,10 +72,10 @@ namespace ExtractorPageWeb.Helpers
                         selectors.Add(new Selector
                         {
                             Id = Convert.ToInt32(reader["Id"]),
-                            TipoSeletor = reader["TipoSeletor"].ToString(),
-                            Seletor = reader["Seletor"].ToString(),
-                            Resultado = reader["Resultado"].ToString(),
-                            Data = reader["Data"].ToString()
+                            TypeSelector = reader["TypeSelector"].ToString(),
+                            SelectorName = reader["SelectorName"].ToString(),
+                            Result = reader["Result"].ToString(),
+                            Date = reader["Date"].ToString()
                         });
                     }
                 }
@@ -86,17 +86,17 @@ namespace ExtractorPageWeb.Helpers
 
         public void UpdateSelector(int id, string tipoSeletor, string seletor, string resultado, string data)
         {
-            string updateQuery = "UPDATE Selectors SET TipoSeletor = @TipoSeletor, Seletor = @Seletor, Resultado = @Resultado, Data = @Data  WHERE Id = @Id;";
+            string updateQuery = "UPDATE Selectors SET TypeSelector = @TypeSelector, SelectorName = @SelectorName, Result = @Result, Date = @Date  WHERE Id = @Id;";
 
             using (var connection = new SQLiteConnection(_connectionString))
             {
                 connection.Open();
                 using (var cmd = new SQLiteCommand(updateQuery, connection))
                 {
-                    cmd.Parameters.AddWithValue("@Data", data);
-                    cmd.Parameters.AddWithValue("@TipoSeletor", tipoSeletor);
-                    cmd.Parameters.AddWithValue("@Seletor", seletor);
-                    cmd.Parameters.AddWithValue("@Resultado", resultado);
+                    cmd.Parameters.AddWithValue("@Date", data);
+                    cmd.Parameters.AddWithValue("@TypeSelector", tipoSeletor);
+                    cmd.Parameters.AddWithValue("@SelectorName", seletor);
+                    cmd.Parameters.AddWithValue("@Result", resultado);
                     cmd.Parameters.AddWithValue("@Id", id);
                     cmd.ExecuteNonQuery();
                 }
@@ -121,10 +121,10 @@ namespace ExtractorPageWeb.Helpers
     public class Selector
     {
         public int Id { get; set; }
-        public string TipoSeletor { get; set; }
-        public string Seletor { get; set; }
-        public string Resultado { get; set; }
-        public string Data { get; set; }
+        public string TypeSelector { get; set; }
+        public string SelectorName { get; set; }
+        public string Result { get; set; }
+        public string Date { get; set; }
     }
 }
 
