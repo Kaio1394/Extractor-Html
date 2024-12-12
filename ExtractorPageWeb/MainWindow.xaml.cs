@@ -16,6 +16,9 @@ using System.Windows.Shapes;
 using System.Xml;
 using ExtractorPageWeb.Helpers;
 using System.Windows.Controls.Primitives;
+using AngleSharp;
+using AngleSharp.Html.Parser;
+using AngleSharp.Dom;
 
 namespace ExtractorPageWeb
 {
@@ -77,9 +80,10 @@ namespace ExtractorPageWeb
         }
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
-            HtmlNode? node;
+            HtmlNode node = null;
+            IElement? element = null;
             var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(_html);
+            var parser = new HtmlParser();
 
             ComboBoxItem? selectedItem = cbTypeSearch.SelectedItem as ComboBoxItem;
             var comboItem = selectedItem?.Content.ToString();
@@ -87,20 +91,22 @@ namespace ExtractorPageWeb
             switch (comboItem)
             {
                 case "XPath":
+                    htmlDoc.LoadHtml(_html);
                     node = htmlDoc.DocumentNode.SelectSingleNode(tbSearch.Text);
+
                     break;
                 case "CssSelector":
-                    node = null;
+                    var document = parser.ParseDocument(_html);
+                    element = document.QuerySelector(tbSearch.Text);
                     break;
                 default:
                     return;
             }
-
-            var result = node.InnerHtml;
+            var result = comboItem == "XPath"? node?.InnerHtml: element?.OuterHtml;
             tbBlockResult.Text = result;
+            
             tabMain.SelectedItem = tabGetResult;
-
-            result = result.Replace("\n", "").Replace("\r", "").Trim();
+            result = result?.Replace("\n", "").Replace("\r", "").Trim();
 
             _sQLiteHelper.InsertData(comboItem, tbSearch.Text, result, DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), tbUrl.Text);
         }
