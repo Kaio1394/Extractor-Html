@@ -102,7 +102,7 @@ namespace ExtractorPageWeb
 
             result = result.Replace("\n", "").Replace("\r", "").Trim();
 
-            _sQLiteHelper.InsertData(comboItem, tbSearch.Text, result, DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
+            _sQLiteHelper.InsertData(comboItem, tbSearch.Text, result, DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), tbUrl.Text);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
