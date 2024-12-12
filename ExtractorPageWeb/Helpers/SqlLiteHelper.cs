@@ -23,6 +23,7 @@ namespace ExtractorPageWeb.Helpers
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 TypeSelector TEXT,
                 SelectorName TEXT,
+                Url TEXT,
                 Result TEXT,
                 Date TEXT
             );"
@@ -38,9 +39,9 @@ namespace ExtractorPageWeb.Helpers
             }
         }
 
-        public void InsertData(string tipoSeletor, string seletor, string resultado, string data)
+        public void InsertData(string tipoSeletor, string seletor, string resultado, string data, string url)
         {
-            string insertQuery = "INSERT INTO Selectors (TypeSelector, SelectorName, Result, Date) VALUES (@TypeSelector, @SelectorName, @Result, @Date);";
+            string insertQuery = "INSERT INTO Selectors (TypeSelector, SelectorName, Url, Result, Date) VALUES (@TypeSelector, @SelectorName, @Url, @Result, @Date);";
 
             using (var connection = new SQLiteConnection(_connectionString))
             {
@@ -50,6 +51,7 @@ namespace ExtractorPageWeb.Helpers
                     cmd.Parameters.AddWithValue("@TypeSelector", tipoSeletor);
                     cmd.Parameters.AddWithValue("@SelectorName", seletor);
                     cmd.Parameters.AddWithValue("@Result", resultado);
+                    cmd.Parameters.AddWithValue("@Url", url);
                     cmd.Parameters.AddWithValue("@Date", data);
                     cmd.ExecuteNonQuery();
                 }
@@ -74,6 +76,7 @@ namespace ExtractorPageWeb.Helpers
                             Id = Convert.ToInt32(reader["Id"]),
                             TypeSelector = reader["TypeSelector"].ToString(),
                             SelectorName = reader["SelectorName"].ToString(),
+                            Url = reader["Url"].ToString(),
                             Result = reader["Result"].ToString(),
                             Date = reader["Date"].ToString()
                         });
@@ -84,9 +87,9 @@ namespace ExtractorPageWeb.Helpers
             return selectors;
         }
 
-        public void UpdateSelector(int id, string tipoSeletor, string seletor, string resultado, string data)
+        public void UpdateSelector(int id, string tipoSeletor, string seletor, string resultado, string data, string url)
         {
-            string updateQuery = "UPDATE Selectors SET TypeSelector = @TypeSelector, SelectorName = @SelectorName, Result = @Result, Date = @Date  WHERE Id = @Id;";
+            string updateQuery = "UPDATE Selectors SET TypeSelector = @TypeSelector, SelectorName = @SelectorName, Url = @Url, Result = @Result, Date = @Date  WHERE Id = @Id;";
 
             using (var connection = new SQLiteConnection(_connectionString))
             {
@@ -95,6 +98,7 @@ namespace ExtractorPageWeb.Helpers
                 {
                     cmd.Parameters.AddWithValue("@Date", data);
                     cmd.Parameters.AddWithValue("@TypeSelector", tipoSeletor);
+                    cmd.Parameters.AddWithValue("@Url", url);
                     cmd.Parameters.AddWithValue("@SelectorName", seletor);
                     cmd.Parameters.AddWithValue("@Result", resultado);
                     cmd.Parameters.AddWithValue("@Id", id);
@@ -123,6 +127,7 @@ namespace ExtractorPageWeb.Helpers
         public int Id { get; set; }
         public string TypeSelector { get; set; }
         public string SelectorName { get; set; }
+        public string Url { get; set; }
         public string Result { get; set; }
         public string Date { get; set; }
     }
